@@ -2,6 +2,7 @@
 #include <string.h>
 
 /*
+for git demo
   2. Comparing string arrays with strings
 */
 void compareCharArrayToString(){
