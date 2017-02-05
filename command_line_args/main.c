@@ -11,11 +11,7 @@ int main(int argc, char* argv[]) {
       }
   }
 
-  int j = 0;
-  scanf("%d", j);
   int ch = getc(stdin);
-
-
   
   return 0;
 }
