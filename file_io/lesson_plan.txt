@@ -1,0 +1,142 @@
+
+/***********struct types*************************/
+plain vanilla struct
+struct {
+    char id[20];
+    char firstName[31];
+    char lastName[31];
+    char streetAddress[51];
+    char city[31];
+    char state[3];
+    float grades[100];
+    float gpa
+} person1, person2;
+
+struct Person{
+    char id[20];
+    char firstName[31];
+    char lastName[31];
+    char streetAddress[51];
+    char city[31];
+    char state[3];
+    int creditScore;
+    float grades[100];
+    float gpa;
+};
+
+struct Person p;
+
+typedef struct {
+    char id[20];
+    char firstName[31];
+    char lastName[31];
+    char streetAddress[51];
+    char city[31];
+    char state[3];
+    floats grades[100];
+    float gpa;
+} Person;
+
+Person p1, p2;
+Person customers[30];
+
+//arrays are preferred over pointers
+
+
+//initializion of structs
+
+
+//assignment
+p1 =  p2; //valid
+
+//get access to structs
+
+//pointer notations to structs
+
+//passed by value
+
+//displaying a struct
+
+//two different data types but same attributes
+not compatible
+
+/*******unions*************/
+
+/******pointers and dynamic memory allocation************/
+malloc
+    - on primitives
+    - on arrays
+    - on structures
+calloc
+realloc
+free
+    - release memory
+    - whose responsibility is it to free memory
+
+/******pointers to functions********************/
+
+
+
+/***********command line args********************/
+main(int argc, char *argv[])
+order of parameters
+    - 0 is the executable file
+    - 1 is the first argument after that
+    - 2 is next and so on
+parsing parameters
+    - rules for passing arguments
+    - using double quotes
+
+
+/************** READING A FILE*******************/
+reading a fixed length record file
+    /************opening a file******************/
+    - opening a file for reading
+        char fileName[] = "C:\\path\\to\\file";
+        char mode[] = "r"; //one of the modes depending on what's needed
+        FILE *fp = fopen(fileName, mode);
+            - returns NULL if unable to open
+            - returns non NULL file pointer otherwise
+        fclose(fp);
+        freopen - not discussed - to associate an existing steam to a file    
+        -modes
+            "r" - read a file in text mode
+            "w" - overwrites the contents
+            "a" - appends to end of file... creates file is necessary
+            "r+" - reading and writing starting at beginning
+            "w+" - reading and writing (truncate if file exists)
+            "a+" - reading and writing (append if file exists)
+            - Binary modes
+            "rb" - reading binary
+            "wb" - writing binary (file does not need to exist)
+            "ab" - open for appending (file does not need to exist)
+    
+    /***************reading lines of data**************/
+    - reading lines of data  
+        ?methods of reading data
+        -read whole line
+        -read formatted input      
+    - Parsing data
+        -parsing comma delimited data
+        -parsing fixed length records
+        -converting data to different types
+    - Storing the data in memory
+    - Processing the data
+
+    /************** WRITING DATA *********************/
+    FILE *fp = fopen(fileName, "w"); //or any other write mode
+    reading a comma delimited file
+    writing data back out to a file
+    writing lines of data to a file
+
+    /************processing the data *****************/
+    read the file in
+    sort the records by last name first name
+    calculate the gpa
+    write to sorted file
+
+/*************** TEMPORARY FILE*********************/
+File *tempFp = tmpfile();
+char *fileName = tmpname(NULL)
+Explanation of temporary file names
+
