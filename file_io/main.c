@@ -2,8 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define LINE_LEN 100
+#define LINE_LEN 200
 #define NAME_LEN 30
+#define TRUE 1
+#define FALSE 0
 
 typedef struct{
     char firstName[NAME_LEN+1];
@@ -11,6 +13,31 @@ typedef struct{
     int age;
     float gpa;
 } Student;
+
+char* trim(char* src, int maxLength){
+    
+    *(src+(maxLength-1)) = '\0';
+}
+Student parseStudentFixed(char* line){
+    Student student;
+    char temp[20] = {0};
+    
+    //strncpy copies from the given pointer 
+    //the indicated number of characters
+    //TODO: write a trim function to remove trailing
+    //      spaces challenge for you!!!!
+
+    strncpy(student.firstName, line, 10);
+    student.firstName[10] = '\0';
+
+    strncpy(student.lastName, (line + 10), 10);
+    student.lastName[10] = '\0';
+
+    student.age = atoi(strncpy(temp, (line + 20), 3));
+    student.gpa = atof(strncpy(temp, (line + 23), 3));
+
+    return student;
+}
 
 Student parseStudent(char* line){
     const char delimiter[2] = ",";
@@ -36,7 +63,6 @@ Student parseStudent(char* line){
         i++;
     }
 
-
     return student;
 }
 
@@ -48,27 +74,64 @@ void printStudent(Student student){
     printf("\nGPA:    %0.1f", student.gpa);
 }
 
+/*
+    We are solely making the determination on 
+    whether the file contains "fixed" as part of
+    it's name (e.g. student_fixed.dat)
+*/
+int strContains(const char* src, const char* substring ){
+    char* needle = strstr(src, substring);
+
+    if(needle != NULL){
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+void setFileName(char* fileName, int argc, char* argv[]){
+    if(argc > 1){
+        strcpy(fileName, argv[1]);
+    }
+    else{
+        strcpy(fileName, "C:\\dev\\temp\\students.csv");
+    }
+}
+
+void logit(char* line){
+    printf("\n%s", line);
+}
+
 int main(int argc, char* argv[]){
 
     FILE *fp = NULL;
-    
-    if(argc > 1){
-        printf("\nReading file %s", argv[1]);
-        fp =  fopen(argv[1], "r");
-    }
-    else{
-        printf("\nReading file C:\\dev\\temp\\students.csv");
-        fp = fopen("C:\\dev\\temp\\students.csv", "r");
-    }
-
+    char fileName[255] = {0};
     char line[LINE_LEN+1];
     Student student;
+    int fixedLength = FALSE;
 
+    logit("setting file name");
+    setFileName(fileName, argc, argv);
+    logit("entering strContains");
+    fixedLength = strContains(fileName, "fixed"); 
+
+    printf("\nFile is fixed: %d", fixedLength);
+ 
+    printf("\nReading file %s", fileName);
+    
+    fp =  fopen(fileName, "r");
+    
     if(fp != NULL){
 
         printf("\nContents of file:\n");
         while(fgets(line, LINE_LEN, fp) != NULL){
-            student = parseStudent(line);
+            
+            if(fixedLength){                
+                student = parseStudentFixed(line);
+            }
+            else{
+                student = parseStudent(line);
+            } 
             printStudent(student);
         }
         
