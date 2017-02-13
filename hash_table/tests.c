@@ -13,7 +13,7 @@ void testWithInts();
 void testWithWords();
 void testWithStrings();
 
-char* getNextWord(char* word, fp){
+char* getNextWord(char* word, FILE* fp){
     /*get next word magic here*/
     return word;   
 }
