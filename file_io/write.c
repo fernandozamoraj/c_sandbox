@@ -31,11 +31,11 @@ void writeStudent(FILE* fp){
     fputs(temp, fp);
     fputs("\n", fp);
 }
+
 int main(void){
     
     FILE* fp = fopen("C:\\dev\\temp\\students1.dat", "w");
     
-
     if(fp != NULL){
 
         for(int i=0;i<10;i++){
