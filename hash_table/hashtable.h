@@ -23,36 +23,87 @@
 */
 
 
+/*
+* High speed algorithm take from online to hash
+*/
 unsigned long hash(unsigned char* str);
 
+/*
+* Uses hash algorithm and mods it by MAX_SIZE
+*/
 int getHash(char* str);
 
+/*
+* Displays the table values when data stored is int*
+*/
 void displayTableInt(Node_t* hashTable[]);
 
+/*
+* Displays the table values when data stored is char*
+*/
 void displayTableString(Node_t* hashTable[]);
 
+/*
+* Puts a value into the table with the value in key and data.
+* If the value exists it overwrites the data. If it does not
+* it creates an entry.
+*/
 void put(char* key, DATA* data, Node_t* hashTable[]);
 
+/*
+* Gets an element by it's key
+* Returns Node_t* for the value found.
+*  Returns NULL if key not found
+*/
 Node_t* get(char* key, Node_t* hashTable[]);
 
+/*
+*  Initializes the hashTable to NULL pointers
+*/
 void initHashTable(Node_t* hashTable[]);
 
-void deleteList(Node_t* list);
 
+
+/*
+* deleteTable deletes frees every node in the table to include the table
+*/
 void deleteTable(Node_t* hashTable[]);
 
+/*
+*  Wrapper for put to put int values into the data
+*/
 void putInt(char* key, int val, Node_t* hashTable[]);
 
+/*
+* Wrapper for put to put char* (C Strings) into the data
+*/
 void putString(char* key, const char* str, Node_t* hashTable[]);
 
+/*
+* Easy API for creating a hashTable of counts. Key-value pairs must 
+* be char*-int* pairs for this to work.
+*/
 void incrementCount(char* key, Node_t* hashTable[]);
 
+/*
+* count - Gets count of all NON-NULL items in the table
+*/
 int count(Node_t** hashTable);
 
+/*
+* getKeys - Gets an array of char strings for all keys in table
+*/
 char** getKeys(Node_t** hashTable);
 
+/*
+* getAll - returns an array of nodes in the hashTable
+*/
 Node_t* getAll(Node_t* hashTable[]);
 
+/*
+*  creates hashTable and returns it as Node_t** which can be
+*  accessed as Node_t* table[]
+*/
 Node_t** createTable();
 
 #endif

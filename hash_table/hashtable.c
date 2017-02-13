@@ -19,7 +19,10 @@ int getHash(char* str){
 }
 
 /*
+  hashing algorithm take from link below
   http://www.cse.yorku.ca/~oz/hash.html
+
+  Hashing explained in wikipedia link below.
   https://en.wikipedia.org/wiki/Hash_table
 
 */
@@ -34,6 +37,9 @@ unsigned long hash(unsigned char* str){
   return hash;
 }
 
+/*
+*
+*/
 void put(char* key, DATA* data, Node_t* hashTable[]){
   int hashIndex = getHash(key);
   
@@ -89,6 +95,14 @@ void putString(char* key, const char* str, Node_t* hashTable[]){
   put(key, newVal, hashTable);
 }
 
+/**
+*    This function assumes key-value of char*-int.
+*    You can keep passing a word to it an it increments
+*    the number associated with that word.
+*    If the word is not already in the table it adds it
+*    with an initial value of 1 for the count.
+*
+*/
 void incrementCount(char* key, Node_t* hashTable[]){
    Node_t* node = get(key, hashTable);
   
@@ -101,13 +115,15 @@ void incrementCount(char* key, Node_t* hashTable[]){
   }
 }
 
+/**
+*     get returns a pointer to the Node_t struc if
+*     it finds the associated key, NULL otherwise.
+**/
 Node_t* get(char* key, Node_t* hashTable[]){
   int hashIndex = getHash(key);
   
   Node_t* list = hashTable[hashIndex];
   
-  //if the hash function works correctly this
-  //will always be true because of hash % MAX_SIZE
   if(list != NULL){  
     
     Node_t* node = findNode(key, list);
@@ -125,12 +141,20 @@ Node_t* get(char* key, Node_t* hashTable[]){
   return NULL;
 }
 
+/**
+*  inits all pointers in the hasTable to NULL
+*/
 void initHashTable(Node_t* hashTable[]){
   for(int i=0; i<MAX_SIZE; i++){
     hashTable[i] = NULL;
   }
 }
 
+/**
+*   displayTableInt - displays the values of the table
+*   when the data in each node is of type in.
+*   Requires linked list functionality
+*/
 void displayTableInt(Node_t* hashTable[]){
   
   printf("\n\n****HASHTABLE INT****");
