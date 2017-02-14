@@ -9,7 +9,7 @@ http://www.trynull.com/2011/10/16/conditional-printf-debug-statements-in-c-based
 #define DEBUG_H
 
 #ifdef DEBUG
-#define DEBUGLOG(ARGS...) printf(ARGS)
+#define DEBUGLOG(ARGS...) printf(ARGS); fflush(stdin)
 #else
 #define DEBUGLOG(ARGS...) do{}while(0)
 #endif

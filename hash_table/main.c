@@ -9,8 +9,12 @@
 
 */
 void testWithInts(){
+
+  DEBUGLOG("\nEntered test with ints");
+  fflush(stdin);
+
    //Create array of Node_t pointers
-  Node_t** hashTable = createTable();
+  Node_t** hashTable = createTableX(7);
   
   printf("\n\nTest with ints....");
   putInt("dog", 1, hashTable);
@@ -148,7 +152,10 @@ void testGetKeys(){
 
 int main(void) {
   
+  DEBUGLOG("\n****Start of main****");
   testWithInts();
+  DEBUGLOG("\n****Start of main****");
+  
   testWithStrings();
   testWithWords();
   testWithFunctionPointer();

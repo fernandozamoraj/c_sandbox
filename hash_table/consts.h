@@ -5,7 +5,7 @@
   Reduce MAX_TABLE_SIZE to lower number than items
   to test collisions
 */
-#define MAX_TABLE_SIZE 1000  
+#define MAX_TABLE_SIZE 100  
 #define DATA void
 
 /* 

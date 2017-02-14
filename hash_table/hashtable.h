@@ -8,7 +8,7 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
-
+#define FIRST_ALLOWABLE_INDEX 1
 
 /*
     -----------Hashtable functions----------------
@@ -23,8 +23,9 @@ unsigned long hash(unsigned char* str);
 /*
 * Uses hash algorithm and mods it by MAX_TABLE_SIZE
 */
-int getHash(char* str);
+int getHash(char* str, int tableSize);
 
+int getTableSize(Node_t* hashTable[]);
 /*
 * Displays the table values when data stored is int*
 */
@@ -67,7 +68,7 @@ DATA* getValue(char* key, Node_t* hashTable[]);
 /*
 *  Initializes the hashTable to NULL pointers
 */
-void initHashTable(Node_t* hashTable[]);
+void initHashTable(Node_t* hashTable[], int size);
 
 
 
@@ -113,5 +114,6 @@ Node_t* getAll(Node_t* hashTable[]);
 *  accessed as Node_t* table[]
 */
 Node_t** createTable();
+Node_t** createTableX(int size);
 
 #endif

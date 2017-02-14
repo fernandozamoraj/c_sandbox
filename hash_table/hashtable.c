@@ -4,6 +4,8 @@
 #include "hashtable.h"
 #include "debug.h"
 
+
+
 /*
 
    ----------Hashtable Functions----------------
@@ -20,8 +22,15 @@
 
 
 */
-int getHash(char* str){
-  return hash(str) % MAX_TABLE_SIZE;
+int getHash(char* str, int tableSize){
+  //members prior to FIRST_ALLOWABLE_INDEX are for metadata
+  return (hash(str) % tableSize)+ FIRST_ALLOWABLE_INDEX;  
+}
+
+int getTableSize(Node_t* hashTable[]){
+  int *s = hashTable[0]->data;
+
+  return *s;
 }
 
 /*
@@ -44,9 +53,27 @@ unsigned long hash(unsigned char* str){
 }
 
 Node_t** createTable(){
-  Node_t**  hashTable = malloc(sizeof(Node_t*) * MAX_TABLE_SIZE);
+  return createTableX(MAX_TABLE_SIZE);
+}
+
+Node_t** createTableX(int size){
+  Node_t**  hashTable = malloc(sizeof(Node_t*) * (size + 1)); //one extra for special size node
   
-  initHashTable(hashTable);
+  DEBUGLOG("\n*****ALLOCATED hashTable********");
+  initHashTable(hashTable, size);
+  DEBUGLOG("\n*****INITIALIZED hashTable********");
+  
+
+  //Keep this in mind to allow more dynamic sizing
+  //index zero is for storing metadata
+  int* tableSize = malloc(sizeof(int));
+  
+  *tableSize = size;
+  char* metadata = "metadata";
+  hashTable[0] = createLink();
+  hashTable[0]->key = strdup(metadata);
+  hashTable[0]->data = tableSize;
+  DEBUGLOG("\n*****Created metad data********");
   
   return hashTable;
 }
@@ -55,7 +82,7 @@ Node_t** createTable(){
 *
 */
 void put(char* key, DATA* data, Node_t* hashTable[]){
-  int hashIndex = getHash(key);
+  int hashIndex = getHash(key, getTableSize(hashTable));
   
   Node_t* list = hashTable[hashIndex];
   
@@ -125,7 +152,7 @@ void incrementCount(char* key, Node_t* hashTable[]){
 *     it finds the associated key, NULL otherwise.
 **/
 Node_t* get(char* key, Node_t* hashTable[]){
-  int hashIndex = getHash(key);
+  int hashIndex = getHash(key, getTableSize(hashTable));
   
   Node_t* list = hashTable[hashIndex];
   
@@ -160,8 +187,9 @@ DATA* getValue(char* key, Node_t* hashTable[]){
 /**
 *  inits all pointers in the hasTable to NULL
 */
-void initHashTable(Node_t* hashTable[]){
-  for(int i=0; i<MAX_TABLE_SIZE; i++){
+void initHashTable(Node_t* hashTable[], int size){
+
+  for(int i=FIRST_ALLOWABLE_INDEX; i <= size; i++){
     hashTable[i] = NULL;
   }
 }
@@ -173,8 +201,9 @@ void initHashTable(Node_t* hashTable[]){
 */
 void displayTableInt(Node_t* hashTable[]){
   
+  int size = getTableSize(hashTable);
   printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_TABLE_SIZE; i++){
+  for(int i = FIRST_ALLOWABLE_INDEX; i <= size; i++){
     Node_t* list = hashTable[i];
     
     if(list != NULL){
@@ -185,8 +214,9 @@ void displayTableInt(Node_t* hashTable[]){
 
 void displayTableString(Node_t* hashTable[]){
   
+  int size = getTableSize(hashTable);
   printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_TABLE_SIZE; i++){
+  for(int i = FIRST_ALLOWABLE_INDEX; i <= size; i++){
     Node_t* head = hashTable[i];
     
     if(head != NULL){
@@ -197,8 +227,10 @@ void displayTableString(Node_t* hashTable[]){
 
 
 void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]){
+
+  int size = getTableSize(hashTable);
     printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_TABLE_SIZE; i++){
+  for(int i = FIRST_ALLOWABLE_INDEX; i <= size; i++){
     Node_t* head = hashTable[i];
     
     if(head != NULL){
@@ -212,7 +244,9 @@ int countTable(Node_t** hashTable){
   int count = 0;
   int tempCount = 0;
 
-  for(int i=0; i< MAX_TABLE_SIZE; i++){
+  int size = getTableSize(hashTable);
+
+  for(int i=FIRST_ALLOWABLE_INDEX; i <= size; i++){
     tempCount = countList(hashTable[i]);
     count += tempCount;
   }
@@ -231,7 +265,9 @@ char** getKeys(Node_t** hashTable){
    DEBUGLOG("\nGot count of %d", count);
    char** keys = malloc(sizeof(char*) * (count + 1));
    int j = 0;
-   for(int i = 0; i < MAX_TABLE_SIZE; i++ ){
+   int size = getTableSize(hashTable);
+
+   for(int i = FIRST_ALLOWABLE_INDEX; i <= size; i++ ){
 
      Node_t* list = hashTable[i];
      while(list != NULL){
@@ -268,9 +304,11 @@ Node_t* getAll(Node_t* hashTable[]){
 
 void deleteTable(Node_t* hashTable[]){
   
+  int size = getTableSize(hashTable);
   DEBUGLOG("\n\n****DELETING HASHTABLE****");
     
-  for(int i = 0; i < MAX_TABLE_SIZE; i++){
+  //This deletes from zero to also clear out metadata node 0  
+  for(int i = 0; i <= size; i++){
     deleteList(hashTable[i]);
   }
   
