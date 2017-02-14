@@ -72,7 +72,17 @@ void testWithStrings(){
   deleteTable(hashTable);
 }
 
-void testWithFunctionPointer(void (*printGeneric)(char*, DATA*)){
+void displayMyString(char* key, DATA* data){
+    char* stringData = data;
+    printf("\nkey: %s data: %s", key, stringData);
+}
+
+void displayMyInt(char* key, DATA* data){
+    int* intData = data;
+    printf("\nkey: %s data: %d", key, *intData);
+}
+
+void testWithFunctionPointer(){
      //Create array of Node_t pointers
   Node_t**  hashTable = createTable();
   
@@ -81,22 +91,33 @@ void testWithFunctionPointer(void (*printGeneric)(char*, DATA*)){
   putString("shirt", "tie", hashTable);
   putString("pants", "belt", hashTable);
   
-  displayTable(printGeneric, hashTable);
+  displayTable(&displayMyString, hashTable);
   deleteTable(hashTable);
   printf("\n\n****END TEST WITH FUNCTION POINTER***");
 }
 
-void displayMyString(char* key, DATA* data){
-    char* stringData = data;
-    printf("\nkey: %s data: %s", key, stringData);
+void testWithFunctionPointerInt(){
+     //Create array of Node_t pointers
+  Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST WITH FUNCTION POINTER*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+  
+  displayTable(&displayMyInt, hashTable);
+  deleteTable(hashTable);
+  printf("\n\n****END TEST WITH FUNCTION POINTER***");
 }
+
 
 int main(void) {
   
   testWithInts();
   testWithStrings();
   testWithWords();
-  testWithFunctionPointer(&displayMyString);
+  testWithFunctionPointer();
+  testWithFunctionPointerInt();
   
   return 0;
 }
