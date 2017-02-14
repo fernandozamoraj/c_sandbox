@@ -19,12 +19,26 @@ typedef struct Node{
    --------List Functions---------------
 */
 
+/*
+   createLink - dynamically allocates memory for a Node_t type 
+   creates a type of Node_t* and returns it
+*/
 Node_t* createLink();
 
+/*
+   Finds the node for the given key
+*/
 Node_t* findNode(char* key, Node_t* list);
 
+/*
+  Adds a node for the given key with the given data
+*/
 Node_t* addNode(char* key, DATA* data, Node_t* list);
 
+/*
+  Gets the last node in the list.  It returns a node
+  unless the list is emtpy
+*/
 Node_t* getTail(Node_t* list);
 
 /*
@@ -34,7 +48,19 @@ Node_t* getTail(Node_t* list);
 */
 void deleteList(Node_t* list);
 
+/*
+  Displays the list as integers if the data holds ints
+  This can better be change to be dynamic by passign a 
+  function pointer to display the list of whatever type
+*/
 void displayListInt(Node_t* list);
 
+/*
+  Displays the list as strings if the data holds ints
+  This can better be change to be dynamic by passign a 
+  function pointer to display the list of whatever type
+*/
 void displayListString(Node_t* list);
+
+void displayList(void (*displayFunc)(char*, DATA*), Node_t* list);
 #endif

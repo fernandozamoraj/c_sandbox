@@ -80,6 +80,18 @@ void displayListString(Node_t* list){
   }
 }
 
+
+void displayList(void (*displayFunc)(char*, DATA*), Node_t* list){
+  Node_t* temp = list;
+  char *value;
+  
+  while(temp != NULL){
+    (*displayFunc)(temp->key, temp->data);
+    temp = temp->next;
+  }
+}
+
+
 void deleteList(Node_t* list){
   
   Node_t* temp = list;

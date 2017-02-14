@@ -179,6 +179,19 @@ void displayTableString(Node_t* hashTable[]){
   }
 }
 
+
+void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]){
+    printf("\n\n****HASHTABLE INT****");
+  for(int i = 0; i < MAX_SIZE; i++){
+    Node_t* head = hashTable[i];
+    
+    if(head != NULL){
+      displayList(displayFunc, head);
+    }
+  }
+}
+
+
 int count(Node_t** hashTable){
   //TODO: walk the entire contents to get count
   return 0;

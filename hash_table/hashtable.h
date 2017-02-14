@@ -44,6 +44,19 @@ void displayTableInt(Node_t* hashTable[]);
 void displayTableString(Node_t* hashTable[]);
 
 /*
+    this function requires a function pointer to print
+    exampe: declare a function like this
+    void printMyData(char* key, DATA* data){
+        char* stringData = data;
+        printf("key: %s data: %s", key, stringData);
+    }
+
+    and call it as 
+    displayTable(&printData, hashTable);
+*/
+void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]);
+
+/*
 * Puts a value into the table with the value in key and data.
 * If the value exists it overwrites the data. If it does not
 * it creates an entry.
