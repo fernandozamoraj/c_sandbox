@@ -110,6 +110,41 @@ void testWithFunctionPointerInt(){
   printf("\n\n****END TEST WITH FUNCTION POINTER***");
 }
 
+void testCountFunction(){
+    Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST COUNT TABLE*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+
+  printf("\nTable Item Count: %d", countTable(hashTable));
+
+  deleteTable(hashTable);
+
+}
+
+void testGetKeys(){
+    Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST GET KEYS*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+
+  printf("\nTable Item Count: %d", countTable(hashTable));
+
+  char** keys = getKeys(hashTable);
+  int i = 0;
+  while(keys[i]){
+    printf("\nkeys[%d] is %s", i, keys[i]);
+    i++;
+  }
+  freeKeys(keys);
+  deleteTable(hashTable);
+
+}
+
 
 int main(void) {
   
@@ -118,6 +153,8 @@ int main(void) {
   testWithWords();
   testWithFunctionPointer();
   testWithFunctionPointerInt();
+  testCountFunction();
+  testGetKeys();
   
   return 0;
 }

@@ -63,4 +63,7 @@ void displayListInt(Node_t* list);
 void displayListString(Node_t* list);
 
 void displayList(void (*displayFunc)(char*, DATA*), Node_t* list);
+
+int countList(Node_t* list);
+
 #endif

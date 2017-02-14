@@ -7,14 +7,6 @@
 
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-/*
-   Hashtable implementation
-   requirements
-   1. Hold any data type (void *)
-   2. 
-*/
-
-
 
 
 
@@ -29,7 +21,7 @@
 unsigned long hash(unsigned char* str);
 
 /*
-* Uses hash algorithm and mods it by MAX_SIZE
+* Uses hash algorithm and mods it by MAX_TABLE_SIZE
 */
 int getHash(char* str);
 
@@ -70,6 +62,8 @@ void put(char* key, DATA* data, Node_t* hashTable[]);
 */
 Node_t* get(char* key, Node_t* hashTable[]);
 
+DATA* getValue(char* key, Node_t* hashTable[]);
+
 /*
 *  Initializes the hashTable to NULL pointers
 */
@@ -101,12 +95,13 @@ void incrementCount(char* key, Node_t* hashTable[]);
 /*
 * count - Gets count of all NON-NULL items in the table
 */
-int count(Node_t** hashTable);
+int countTable(Node_t** hashTable);
 
 /*
 * getKeys - Gets an array of char strings for all keys in table
 */
 char** getKeys(Node_t** hashTable);
+void freeKeys(char** keys);
 
 /*
 * getAll - returns an array of nodes in the hashTable

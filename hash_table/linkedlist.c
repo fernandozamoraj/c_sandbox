@@ -111,3 +111,16 @@ void deleteList(Node_t* list){
     temp = next;
   }
 }
+
+int countList(Node_t* list){
+  Node_t* temp = list;
+  char *value;
+  int count = 0;
+  
+  while(temp != NULL){
+    temp = temp->next;
+    count++;
+  }
+
+  return count;
+}

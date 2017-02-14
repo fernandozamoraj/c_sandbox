@@ -5,17 +5,23 @@
 #include "debug.h"
 
 /*
-   TODO: remove all printf statements
+
    ----------Hashtable Functions----------------
    Although the data can handle any data type,
-   it can only handle int* and char*. If you want to 
-   handle other data types simply write some more Functions
-   for it.  Copy the function for putInt for example and 
-   name putFloat
+   it can only handle int* and char*. To 
+   handle other data types more data type specific 
+   functions are necessary.  
+   Copy the function for putInt for example and 
+   name putFloat and implement to handle float.
+
+   As an alternative function pointers can be used. 
+   The API user would then have to define their type
+   specific functions.
+
 
 */
 int getHash(char* str){
-  return hash(str) % MAX_SIZE;
+  return hash(str) % MAX_TABLE_SIZE;
 }
 
 /*
@@ -35,6 +41,14 @@ unsigned long hash(unsigned char* str){
   }
   
   return hash;
+}
+
+Node_t** createTable(){
+  Node_t**  hashTable = malloc(sizeof(Node_t*) * MAX_TABLE_SIZE);
+  
+  initHashTable(hashTable);
+  
+  return hashTable;
 }
 
 /*
@@ -72,15 +86,6 @@ void put(char* key, DATA* data, Node_t* hashTable[]){
     }
   }
 }
-
-Node_t** createTable(){
-  Node_t**  hashTable = malloc(sizeof(Node_t*) * MAX_SIZE);
-  
-  initHashTable(hashTable);
-  
-  return hashTable;
-}
-
 
 void putInt(char* key, int val, Node_t* hashTable[]){
   
@@ -141,11 +146,22 @@ Node_t* get(char* key, Node_t* hashTable[]){
   return NULL;
 }
 
+
+DATA* getValue(char* key, Node_t* hashTable[]){
+  Node_t* dataNode = get(key, hashTable);
+
+  if(dataNode != NULL){
+    return dataNode->data;
+  }
+
+  return NULL;
+}
+
 /**
 *  inits all pointers in the hasTable to NULL
 */
 void initHashTable(Node_t* hashTable[]){
-  for(int i=0; i<MAX_SIZE; i++){
+  for(int i=0; i<MAX_TABLE_SIZE; i++){
     hashTable[i] = NULL;
   }
 }
@@ -158,7 +174,7 @@ void initHashTable(Node_t* hashTable[]){
 void displayTableInt(Node_t* hashTable[]){
   
   printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_SIZE; i++){
+  for(int i = 0; i < MAX_TABLE_SIZE; i++){
     Node_t* list = hashTable[i];
     
     if(list != NULL){
@@ -170,7 +186,7 @@ void displayTableInt(Node_t* hashTable[]){
 void displayTableString(Node_t* hashTable[]){
   
   printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_SIZE; i++){
+  for(int i = 0; i < MAX_TABLE_SIZE; i++){
     Node_t* head = hashTable[i];
     
     if(head != NULL){
@@ -182,7 +198,7 @@ void displayTableString(Node_t* hashTable[]){
 
 void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]){
     printf("\n\n****HASHTABLE INT****");
-  for(int i = 0; i < MAX_SIZE; i++){
+  for(int i = 0; i < MAX_TABLE_SIZE; i++){
     Node_t* head = hashTable[i];
     
     if(head != NULL){
@@ -192,35 +208,61 @@ void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]){
 }
 
 
-int count(Node_t** hashTable){
-  //TODO: walk the entire contents to get count
-  return 0;
+int countTable(Node_t** hashTable){
+  int count = 0;
+  int tempCount = 0;
+
+  for(int i=0; i< MAX_TABLE_SIZE; i++){
+    tempCount = countList(hashTable[i]);
+    count += tempCount;
+  }
+
+  DEBUGLOG("\nTable count: %d", count);
+
+  return count;
 }
 
 char** getKeys(Node_t** hashTable){
+   DEBUGLOG("\nentered getKeys");
    //TODO get count of every element
    //int keyCount = count(hashTable);
-   char** keys = NULL;
-   //char** keys = malloc(sizeof(char*)*keyCount);
-       
-   //TODO: implement a get keys method
-   //it will allow for retrieving every value
-   //in the hashTable
+   //char** keys = NULL;
+   int count = countTable(hashTable);
+   DEBUGLOG("\nGot count of %d", count);
+   char** keys = malloc(sizeof(char*) * (count + 1));
+   int j = 0;
+   for(int i = 0; i < MAX_TABLE_SIZE; i++ ){
 
-   //TODO: walk the entire table and retrive keys
+     Node_t* list = hashTable[i];
+     while(list != NULL){
+        DEBUGLOG("\nValue %s", list->key);
+
+        keys[j] = strdup(list->key);
+        j++;
+        list = list->next;
+     }
+   }
+   keys[j] = NULL;
 
    return keys;
 }
 
-Node_t* getAll(Node_t* hashTable[]){
-  //TODO get all elements
-  //1. get the count
-  //create a new array with that size 
-  //copy all the elements into it 
-  //return that array
-  Node_t* array = NULL;
+void freeKeys(char** keys){
+  int i = 0;
+  while(keys[i] != NULL){
+    free(keys[i]);
+    i++;
+  }
 
-  return array;
+  free(keys);
+}
+
+Node_t* getAll(Node_t* hashTable[]){
+   DEBUGLOG("\nentered getKeys");
+   
+   //TODO: implement later
+
+   return NULL;
 }
 
 
@@ -228,7 +270,7 @@ void deleteTable(Node_t* hashTable[]){
   
   DEBUGLOG("\n\n****DELETING HASHTABLE****");
     
-  for(int i = 0; i < MAX_SIZE; i++){
+  for(int i = 0; i < MAX_TABLE_SIZE; i++){
     deleteList(hashTable[i]);
   }
   

@@ -2,10 +2,10 @@
 #define CONSTS_H
 
 /*
-  Reduce MAX_SIZE to lower number than items
+  Reduce MAX_TABLE_SIZE to lower number than items
   to test collisions
 */
-#define MAX_SIZE 1000  
+#define MAX_TABLE_SIZE 1000  
 #define DATA void
 
 /* 
