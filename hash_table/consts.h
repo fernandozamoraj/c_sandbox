@@ -13,6 +13,6 @@
   Change to anything else DEBUGOFF or something to not
   printf debug statements
 */
-#define DEBUG
+#define DEBUGOFF
 
 #endif
