@@ -293,12 +293,43 @@ void freeKeys(char** keys){
   free(keys);
 }
 
-Node_t* getAll(Node_t* hashTable[]){
-   DEBUGLOG("\nentered getKeys");
+Node_t** getAll(Node_t* hashTable[]){
+   DEBUGLOG("\n**********Entered getAll***********");
+   int nodeCount = countTable(hashTable);
+   DEBUGLOG("\n**********Got Count***********");
    
-   //TODO: implement later
 
-   return NULL;
+   int size = getTableSize(hashTable);
+  DEBUGLOG("\n**********Got Table Size***********");
+   
+   Node_t** myArray = NULL;
+   
+   if(nodeCount > 0){
+      myArray = malloc(sizeof(Node_t*) * (nodeCount+1));
+   }
+   DEBUGLOG("\n**********ALLOCATED SIZE Size: %d***********", nodeCount);
+   
+
+   int j = 0;
+   for(int i=FIRST_ALLOWABLE_INDEX;i<=size;i++){
+     DEBUGLOG("\n**********LOOPING %d***********", i);
+     Node_t* list = hashTable[i];
+     while(list != NULL){
+        DEBUGLOG("\n**********WALKING LIST %s***********", list->key);
+        myArray[j] = list;
+        list = list->next;
+        j++;
+     }
+   }
+
+   DEBUGLOG("\n***********exited loop*************");
+   if(j > 0){
+     myArray[j] = NULL;
+   }
+   DEBUGLOG("\n***********ASSINED NULL TO*************");
+
+
+   return myArray;
 }
 
 

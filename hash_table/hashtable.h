@@ -107,7 +107,7 @@ void freeKeys(char** keys);
 /*
 * getAll - returns an array of nodes in the hashTable
 */
-Node_t* getAll(Node_t* hashTable[]);
+Node_t** getAll(Node_t* hashTable[]);
 
 /*
 *  creates hashTable and returns it as Node_t** which can be

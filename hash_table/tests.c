@@ -8,51 +8,15 @@
    ---------TESTS--------------
 
 */
-
-void testWithInts();
-void testWithWords();
-void testWithStrings();
-
-char* getNextWord(char* word, FILE* fp){
-    /*get next word magic here*/
-    return word;   
-}
-void readFileExample(char* fileName, Node_t* hashTable[]){
-
-    /*
-    char* word;
-    FILE* fp = fopen(file, "r");
-
-    while((word = getNextWord(fp)) != NULL){
-       incrementCount(word, hashTable);
-       free(word);
-    }
-
-    //this can wait if reading multiple files
-    displayTableInt(hashtable);
-
-    fclose(fp);
-    */
-}
-
-int main(void) {
-  
-  printf("\n\n***********BEGIN ALL TESTS*********");
-
-  testWithInts();
-  testWithStrings();
-  testWithWords();
-
-  printf("\n\n***********END OF ALL TESTS*********");
-
-  return 0;
-}
-
 void testWithInts(){
+
+  DEBUGLOG("\nEntered test with ints");
+  fflush(stdin);
+
    //Create array of Node_t pointers
-  Node_t** hashTable = createTable();
+  Node_t** hashTable = createTableX(7);
   
-  printf("\n\n********TEST WITH INTS***********");
+  printf("\n\nTest with ints....");
   putInt("dog", 1, hashTable);
   putInt("cat", 2, hashTable);
   putInt("horse", 3, hashTable);
@@ -76,8 +40,6 @@ void testWithInts(){
   
   displayTableInt(hashTable);
   deleteTable(hashTable);
-
-  printf("\n\n************END OF TEST WITH INTS********");
 }
 
 void testWithWords(){
@@ -101,8 +63,7 @@ void testWithStrings(){
    //Create array of Node_t pointers
   Node_t**  hashTable = createTable();
   
-  printf("\n\n******TEST WITH STRINGS**********");
-
+  printf("\n\nTest with strings....");
   putString("dog", "bone", hashTable);
   putString("cat", "toy", hashTable);
   putString("horse", "hay", hashTable);
@@ -113,7 +74,151 @@ void testWithStrings(){
 
   displayTableString(hashTable);
   deleteTable(hashTable);
-
-  printf("\n\n******END OF TEST WITH STRINGS**********");
 }
 
+void displayMyString(char* key, DATA* data){
+    char* stringData = data;
+    printf("\nkey: %s data: %s", key, stringData);
+}
+
+void displayMyInt(char* key, DATA* data){
+    int* intData = data;
+    printf("\nkey: %s data: %d", key, *intData);
+}
+
+void testWithFunctionPointer(){
+     //Create array of Node_t pointers
+  Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST WITH FUNCTION POINTER*****");
+  putString("shoe", "sock", hashTable);
+  putString("shirt", "tie", hashTable);
+  putString("pants", "belt", hashTable);
+  
+  displayTable(&displayMyString, hashTable);
+  deleteTable(hashTable);
+  printf("\n\n****END TEST WITH FUNCTION POINTER***");
+}
+
+void testWithFunctionPointerInt(){
+     //Create array of Node_t pointers
+  Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST WITH FUNCTION POINTER*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+  
+  displayTable(&displayMyInt, hashTable);
+  deleteTable(hashTable);
+  printf("\n\n****END TEST WITH FUNCTION POINTER***");
+}
+
+void testCountFunction(){
+    Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST COUNT TABLE*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+
+  printf("\nTable Item Count: %d", countTable(hashTable));
+
+  deleteTable(hashTable);
+
+}
+
+void testGetKeys(){
+    Node_t**  hashTable = createTable();
+  
+  printf("\n\n***TEST GET KEYS*****");
+  putInt("shoe", 1, hashTable);
+  putInt("shirt", 2, hashTable);
+  putInt("pants", 3, hashTable);
+
+  printf("\nTable Item Count: %d", countTable(hashTable));
+
+  char** keys = getKeys(hashTable);
+  int i = 0;
+  while(keys[i]){
+    printf("\nkeys[%d] is %s", i, keys[i]);
+    i++;
+  }
+  freeKeys(keys);
+  deleteTable(hashTable);
+
+}
+
+void testGetAll(){
+  int i = 0;
+  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called", "mars", "and", 
+                   "pluto", "was", "from", "a", "planet", "called", "pluto"};
+  Node_t** hashTable = createTableX(10);
+  
+  printf("\n\n******TEST GET ALL**********");
+  for(i=0;i<16;i++){
+    incrementCount(words[i], hashTable);
+  }
+  
+  Node_t** all = getAll(hashTable);
+  DEBUGLOG("\n********GOT ALL**************");
+  
+  i = 0;
+  while(all[i] != NULL){
+
+    int* value = all[i]->data;
+    printf("\nKey: %s Value: %d", all[i]->key, *value);
+    i++;
+  }
+  DEBUGLOG("\n************exited while***********");
+
+  //There is no need to free all
+
+  deleteTable(hashTable);
+                   
+  printf("\n\n******END OF TEST GET ALL**********");                 
+}
+
+
+void testGetValue(){
+  int i = 0;
+  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called"};
+  Node_t** hashTable = createTableX(10);
+  
+  printf("\n\n******TEST GET VALUE**********");
+  for(i=0;i<7;i++){
+    incrementCount(words[i], hashTable);
+  }
+  
+  printf("\n\n\n    VALUES   \n");
+  for(i=0;i<7;i++){
+    int* value = getValue(words[i], hashTable);
+    if(value != NULL){
+      printf("\nKey: %20s Value: %3d", words[i], *value);
+    }
+  }
+
+  deleteTable(hashTable);
+                   
+  printf("\n\n******END OF TEST GET VALUE**********");                 
+}
+
+int main(void) {
+  
+  DEBUGLOG("\n****Start of main****");
+
+  /*
+  testWithInts();
+  testWithStrings();
+  testWithWords();
+  testWithFunctionPointer();
+  testWithFunctionPointerInt();
+  testCountFunction();
+  testGetKeys();
+  testGetAll();
+  */
+
+  testGetValue();
+  
+  return 0;
+}
