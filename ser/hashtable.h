@@ -88,7 +88,7 @@
 *   and a node should contain that as nested struct
 */
 typedef struct Node{
-  char* key;
+  char key[MAX_WORD_SIZE];  //attempt to reduce possibilities of memory leaks
   DATA* data;
   struct Node* next;
 } Node_t;
@@ -309,7 +309,7 @@ void initHashTable(Node_t* hashTable[], int size);
 *   NOTE: Returns a pointer to the table since it could have been
 *   resized.
 */
-Node_t** put(char* key, DATA* data, Node_t* hashTable[], int resize, int dupkey);
+Node_t** put(char* key, DATA* data, Node_t* hashTable[]);
 
 /*
 *   putInt - wrapper for putting int data values into the table.

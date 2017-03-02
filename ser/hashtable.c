@@ -70,7 +70,7 @@ Node_t* addNode(char* key, DATA* data, Node_t* list){
   Node_t* node = createLink();
   Node_t* tail = NULL;
 
-  node->key = strdup(key);
+  strcpy(node->key, key);
   node->data = data;
 
   tail = getTail(list);
@@ -115,9 +115,8 @@ void deleteList(Node_t* list){
 
     DEBUGLOG("\nDeleting %s...", temp->key);
 
-    //Key and data are dynamic so they must
+    //Key is dynamic so they must
     //be freed.
-    free(temp->key);
     free(temp->data);
     free(temp);
 
@@ -167,7 +166,7 @@ Node_t* findNode(char* key, Node_t* list){
     temp = temp->next;
   }
 
-  return temp;
+  return NULL;
 }
 
 
@@ -243,7 +242,7 @@ Node_t** createTableX(int size){
  
   hashTable[0] = createLink();
   hashTable[0]->data = tableSize;
-  hashTable[0]->key = strdup(TABLE_SIZE_STR);  
+  strcpy(hashTable[0]->key, TABLE_SIZE_STR);  
   
   /* store the count in the second link of the zero element */
   int* nodeCount = malloc(sizeof(int));
@@ -579,21 +578,10 @@ void initHashTable(Node_t* hashTable[], int size){
   7. It calls tableResize if resize parameter is set to 1.
      The resizeTable determines if the density is high enough to
      actually resize.
-  8. resize parameter is used to determine if call to resize
-     should be made. This parameter is necessary to avoid infinite
-     recursion when resizing. Although it recursion should not
-     occur without it.  It is a safety mechanism to avoid infinite
-     calls to resize from the resizeTable method. It's possible only
-     if the hash function is bad or I overlooked proper hashing
-     mechanism.
-  9. dupkey - paramter is used to notify this method wether to
-     re-allocated memory for the key or not. In the resizeTable
-     function it is better to not re-allocated memory (i.e. not call
-     strdup) since we can simply re-use existing data as is.
- 10. It returns a pointer to the new table in the case that the
+  8. It returns a pointer to the new table in the case that the
      the table was re-sized.
 */
-Node_t** put(char* key, DATA* data, Node_t* hashTable[], int resize, int dupkey){
+Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
   int hashIndex = getHash(key, getTableSize(hashTable));
 
   Node_t* list = hashTable[hashIndex];
@@ -604,12 +592,8 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[], int resize, int dupkey)
   if(list == NULL){
     hashTable[hashIndex] = createLink();
 
-    if(dupkey){
-        hashTable[hashIndex]->key = strdup(key);
-    }
-    else{
-        hashTable[hashIndex]->key = key;
-    }
+    strcpy(hashTable[hashIndex]->key, key);
+    
     hashTable[hashIndex]->data = data;
   }
   else{  //collision
@@ -625,10 +609,9 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[], int resize, int dupkey)
     }
     else{
 
-      //free the node data since it is being replaced with new
-      //allocated data and simply update the data
-      //except when resizing... we reuse the data
-      if(resize == 0){
+      //if data contains different memory addresses,
+      //release the memory
+      if(data != node->data){
         free(node->data);
       }
       node->data = data;
@@ -639,10 +622,7 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[], int resize, int dupkey)
 
     DEBUGLOG("\ncount: %d", count);
     updateCollisionCount(count, hashTable);
-
-    if(resize){
-        hashTable = resizeTable(hashTable);
-    }
+    hashTable = resizeTable(hashTable);
   }
 
   if(addedNode){
@@ -665,7 +645,7 @@ Node_t** putInt(char* key, int val, Node_t* hashTable[]){
   int* newVal = malloc(sizeof(val));
   *newVal = val;
 
-  return put(key, newVal, hashTable, 1, 1);
+  return put(key, newVal, hashTable);
 }
 
 /*
@@ -678,7 +658,7 @@ Node_t** putInt(char* key, int val, Node_t* hashTable[]){
 */
 Node_t** putString(char* key, const char* str, Node_t* hashTable[]){
   char* newVal = strdup(str);
-  return put(key, newVal, hashTable, 1, 1);
+  return put(key, newVal, hashTable);
 }
 
 /*
@@ -731,7 +711,7 @@ Node_t** resizeTable(Node_t** hashTable){
           There is no need to capture the table since it will not resize
           from this put call.
         */
-        put(allNodesTable[i]->key, allNodesTable[i]->data, newTable, 0, 0);
+        put(allNodesTable[i]->key, allNodesTable[i]->data, newTable);
         i++;
         DEBUGLOG("\nin resizing after put i: %d %p", i, allNodesTable[i]);
     }
@@ -745,7 +725,6 @@ Node_t** resizeTable(Node_t** hashTable){
         while(temp != NULL){
             DEBUGLOG("!!!!IN RESIZE DELETEING OLD NODES!!!");
             previous = temp->next;
-            free(temp->key); //since key is dupped in create link
             free(temp);
             temp = previous;
             
