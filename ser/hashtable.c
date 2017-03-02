@@ -415,10 +415,11 @@ Node_t** getAll(Node_t* hashTable[]){
      DEBUGLOG("\n**********LOOPING %d***********", i);
      Node_t* list = hashTable[i];
      while(list != NULL){
-        DEBUGLOG("\n**********WALKING LIST %s***********", list->key);
+        DEBUGLOG("\n**********WALKING LIST %s NodeCount %d j %d***********", list->key, nodeCount, j);
         myArray[j] = list;
         list = list->next;
         j++;
+        
      }
    }
 
