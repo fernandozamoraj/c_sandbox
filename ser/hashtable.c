@@ -240,11 +240,11 @@ Node_t** createTableX(int size){
   int* tableSize = malloc(sizeof(int));
 
   *tableSize = size+1;
-  char* metadata = TABLE_SIZE_STR;
+ 
   hashTable[0] = createLink();
-  hashTable[0]->key = strdup(metadata);
   hashTable[0]->data = tableSize;
-
+  hashTable[0]->key = strdup(TABLE_SIZE_STR);  
+  
   /* store the count in the second link of the zero element */
   int* nodeCount = malloc(sizeof(int));
   *nodeCount = 0;
@@ -279,10 +279,7 @@ void deleteTable(Node_t* hashTable[]){
   int size = getTableSize(hashTable);
   int i = 0;
   
-  //free metadata list
-  deleteList(hashTable[0]);
-
-  for(i = FIRST_ALLOWABLE_INDEX; i < size; i++){
+  for(i = 0; i < size; i++){
     deleteList(hashTable[i]);
   }
 
@@ -724,30 +721,34 @@ Node_t** resizeTable(Node_t** hashTable){
     Node_t** newTable = createTableX(nodeCount * NEW_SIZE_FACTOR);
 
     Node_t** allNodesTable = getAll(hashTable);
-
+    
+    DEBUGLOG("\n***CREATED ALL NODES***");
     /* disconnect all lists*/
     int i = 0;
     while(allNodesTable[i]){
-
+        DEBUGLOG("\n****Putting node %d****", i);
         /*
           There is no need to capture the table since it will not resize
           from this put call.
         */
         put(allNodesTable[i]->key, allNodesTable[i]->data, newTable, 0, 0);
         i++;
-        DEBUGLOG("in resizing after put i: %d %p", i, allNodesTable[i]);
+        DEBUGLOG("\nin resizing after put i: %d %p", i, allNodesTable[i]);
     }
     
-    for(i=FIRST_ALLOWABLE_INDEX;i<oldTableSize;i++){
+    for( i=0; i<oldTableSize; i++){
         Node_t* list = hashTable[i];
 
         Node_t* temp = list;
         Node_t* previous;
 
         while(temp != NULL){
+            DEBUGLOG("!!!!IN RESIZE DELETEING OLD NODES!!!");
             previous = temp->next;
+            free(temp->key); //since key is dupped in create link
             free(temp);
             temp = previous;
+            
         }
     }
 
