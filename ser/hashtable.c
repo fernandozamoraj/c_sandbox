@@ -725,7 +725,13 @@ Node_t** resizeTable(Node_t** hashTable){
         while(temp != NULL){
             DEBUGLOG("!!!!IN RESIZE DELETEING OLD NODES!!!");
             previous = temp->next;
+
+            //Free up meta data... that data is not reused
+            if(i==0){
+              free(temp->data); 
+            }
             free(temp);
+            
             temp = previous;
             
         }
