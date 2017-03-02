@@ -115,8 +115,7 @@ void deleteList(Node_t* list){
 
     DEBUGLOG("\nDeleting %s...", temp->key);
 
-    //Key is dynamic so they must
-    //be freed.
+    //Data is dynamic so they must
     free(temp->data);
     free(temp);
 
@@ -593,8 +592,7 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
   }
 
   Node_t* list = hashTable[hashIndex];
-  int addedNode = 1;    /*default to true for adding new node*/
-
+  
   DEBUGLOG("\nPutting %s at %d", key, hashIndex);
 
   if(list == NULL){
@@ -603,6 +601,7 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
     strcpy(hashTable[hashIndex]->key, key);
     
     hashTable[hashIndex]->data = data;
+    updateNodeCount(hashTable);
   }
   else{  //collision
 
@@ -614,6 +613,7 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
 
       DEBUGLOG("\nAdding node for %s", key);
       node = addNode(key, data, list);
+      updateNodeCount(hashTable);
     }
     else{
 
@@ -623,19 +623,11 @@ Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
         free(node->data);
       }
       node->data = data;
-      addedNode = 0;
     }
 
     int count = countList(list);
-
     DEBUGLOG("\ncount: %d", count);
-    updateCollisionCount(count, hashTable);
     hashTable = resizeTable(hashTable);
-  }
-
-  if(addedNode){
-    updateNodeCount(hashTable);
-    DEBUGLOG("\nMade it out of updateNodeCount");
   }
 
   return hashTable;
@@ -705,7 +697,6 @@ Node_t** resizeTable(Node_t** hashTable){
     }
     DEBUGLOG("\nResizing....");
 
-
     Node_t** newTable = createTableX(nodeCount * NEW_SIZE_FACTOR);
 
     Node_t** allNodesTable = getAll(hashTable);
@@ -731,7 +722,7 @@ Node_t** resizeTable(Node_t** hashTable){
         Node_t* previous;
 
         while(temp != NULL){
-            DEBUGLOG("!!!!IN RESIZE DELETEING OLD NODES!!!");
+            DEBUGLOG("!!!!IN RESIZE DELETENG OLD NODES!!!");
             previous = temp->next;
 
             //Free up meta data... that data is not reused
@@ -740,8 +731,7 @@ Node_t** resizeTable(Node_t** hashTable){
             }
             free(temp);
             
-            temp = previous;
-            
+            temp = previous;            
         }
     }
 
