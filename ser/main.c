@@ -111,6 +111,7 @@ void countWordsInFile(int argc, char *argv[]){
 	}
 
 	sortAndDisplay(lineCountParameter, hashtable);
+    printf("\n\n");
 	deleteTable(hashtable);
 }
 
