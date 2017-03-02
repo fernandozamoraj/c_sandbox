@@ -68,7 +68,7 @@
 *   Remove this line or change to DEBUGOFF
 *   to print DEBUG statements
 */
-#define DEBUG
+#define DEBUGOFF
 
 /*
 *   Macro for printing debug statements

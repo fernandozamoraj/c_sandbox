@@ -429,7 +429,7 @@ Node_t** getAll(Node_t* hashTable[]){
         This serves as a marker for the end of the
         array.
      */
-     myArray[j] = NULL;  //
+     myArray[nodeCount] = NULL;  //
    }
    DEBUGLOG("\n***********ASSIGNED NULL TO LAST ELEMENT OF myArray**********");
 
@@ -582,7 +582,14 @@ void initHashTable(Node_t* hashTable[], int size){
      the table was re-sized.
 */
 Node_t** put(char* key, DATA* data, Node_t* hashTable[]){
+  int tableSize = getTableSize(hashTable);
+
   int hashIndex = getHash(key, getTableSize(hashTable));
+
+  //safety mechanism to avoid writing past the end of table
+  if(hashIndex >= tableSize ){
+    hashIndex = tableSize - 1;
+  }
 
   Node_t* list = hashTable[hashIndex];
   int addedNode = 1;    /*default to true for adding new node*/
