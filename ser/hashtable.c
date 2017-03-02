@@ -401,12 +401,12 @@ Node_t** getAll(Node_t* hashTable[]){
 
    //allocates one extra node to have a NULL marker at end of list
    if(nodeCount > 0){
-      myArray = malloc(sizeof(Node_t*) * (nodeCount+1));
+      myArray = malloc(sizeof(Node_t*) * (nodeCount+3));
    }
    DEBUGLOG("\n**********ALLOCATED SIZE Size: %d***********", nodeCount);
 
    int i =0;
-   for(i=0;i<nodeCount+1; i++){
+   for(i=0;i<nodeCount+3; i++){
      myArray[i] = NULL;
    }
 
