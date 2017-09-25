@@ -1,0 +1,45 @@
+1.  There are a couple of ways of accomplishing hash resizing
+    One is to create a brand new array of indexs
+    Copy all zero entries into the new array by re_calculating their index
+    a. approach is to simply create a brand new table and re-entery 
+       every entry into the new table.  
+       This approach makes it safer since memory leak bugs would be 
+       easier to detect.
+    b. The second approach is to create a brand new array and only
+       recalculate the entry points into the array so that entire entries
+       are remapped. At first this seems viable but, it is not because
+       linked lists will not necessarily still be linked after the resizing.
+       Let's say for instance that you have a 10 item list.
+       You have two words a and b.  Let's say that a's hash is 
+       a hashes to 6
+       b hashes to 16
+       In the table of 10 both items would be linked together like this
+       [0]
+       [...]
+       [6]->[a]->[b]
+       [...]
+       [9]
+       So let's say that we resize the table to 20 or more this time
+       so now a and be should no longer be linked because one belongs in index
+       6 and the other belongs in index 16
+       Like this
+       [0]
+       [...]
+       [6]->[a]
+       [...]
+       [16]->[b]
+       [...]
+       [19]
+
+       The second approach could take a lazy approach and just break and reconnect
+       links but that could lead to some obscure pointer bugs.
+
+       The safest bet is to create a new list and re-insert all items from the old
+       to the new.
+
+ 2.   Holding density.  We can store a value that maintains a count of node entries and 
+      compare it against the arrays overall size.  We can set a constant density size 
+      and when it reaches that density we can go ahead and resize.
+      A simple calculation could be  density = nodes / hashtable_size
+
+   

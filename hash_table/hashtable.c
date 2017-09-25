@@ -56,6 +56,28 @@ Node_t** createTable(){
   return createTableX(MAX_TABLE_SIZE);
 }
 
+/*
+
+
+*/
+void resizeTable(Node_t* hashTable[]){
+    //create temp table
+    //use getAll
+
+    //copy old table into temp table
+
+
+    //realloc hashtable with new size 
+
+    //copy old table into hashtable 
+
+    //how do you realloc the sizes of data?
+}
+
+/*
+   Allows a resizeable table
+
+*/
 Node_t** createTableX(int size){
   Node_t**  hashTable = malloc(sizeof(Node_t*) * (size + 1)); //one extra for special size node
   
@@ -73,13 +95,20 @@ Node_t** createTableX(int size){
   hashTable[0] = createLink();
   hashTable[0]->key = strdup(metadata);
   hashTable[0]->data = tableSize;
+  
+  /* store the count in the second link of the zero element */
+  int* nodeCount = malloc(sizeof(int));
+  *nodeCount = 0;
+  hashTable[0]->next = createLink();
+  hashTable[0]->next->data = nodeCount;
+  
   DEBUGLOG("\n*****Created metad data********");
   
   return hashTable;
 }
 
 /*
-*
+* TODO: change this to return the new resized table
 */
 void put(char* key, DATA* data, Node_t* hashTable[]){
   int hashIndex = getHash(key, getTableSize(hashTable));
@@ -325,6 +354,8 @@ Node_t** getAll(Node_t* hashTable[]){
    DEBUGLOG("\n***********exited loop*************");
    if(j > 0){
      myArray[j] = NULL;
+
+     //TODO: point all myArray[j]->next = NULL
    }
    DEBUGLOG("\n***********ASSINED NULL TO*************");
 

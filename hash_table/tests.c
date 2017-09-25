@@ -177,6 +177,7 @@ void testGetAll(){
   DEBUGLOG("\n************exited while***********");
 
   //There is no need to free all
+  //TODO: on second thought there is a need to free all node pointers
 
   deleteTable(hashTable);
                    
@@ -186,11 +187,11 @@ void testGetAll(){
 
 void testGetValue(){
   int i = 0;
-  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called"};
+  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called", "cat"};
   Node_t** hashTable = createTableX(10);
   
   printf("\n\n******TEST GET VALUE**********");
-  for(i=0;i<7;i++){
+  for(i=0;i<8;i++){
     incrementCount(words[i], hashTable);
   }
   
