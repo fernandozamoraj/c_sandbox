@@ -229,7 +229,7 @@ void displayTableString(Node_t* hashTable[]){
 void displayTable(void (*displayFunc)(char*, DATA*), Node_t* hashTable[]){
 
   int size = getTableSize(hashTable);
-    printf("\n\n****HASHTABLE INT****");
+  printf("\n\n****HASHTABLE INT****");
   for(int i = FIRST_ALLOWABLE_INDEX; i <= size; i++){
     Node_t* head = hashTable[i];
     

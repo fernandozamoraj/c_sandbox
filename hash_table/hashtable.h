@@ -70,8 +70,6 @@ DATA* getValue(char* key, Node_t* hashTable[]);
 */
 void initHashTable(Node_t* hashTable[], int size);
 
-
-
 /*
 * deleteTable deletes frees every node in the table to include the table
 */

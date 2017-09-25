@@ -43,8 +43,10 @@ void testWithInts(){
 }
 
 void testWithWords(){
-  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called", "mars", "and", 
-                   "pluto", "was", "from", "a", "planet", "called", "pluto"};
+  char* words[] = 
+          {"the",    "cat",    "was",    "from",  "a",   "planet", 
+           "called", "mars",   "and",    "pluto", "was", "from", 
+           "a",      "planet", "called", "pluto"};
   Node_t** hashTable = createTable();
   
   printf("\n\n******TEST WITH WORDS**********");
@@ -151,8 +153,10 @@ void testGetKeys(){
 
 void testGetAll(){
   int i = 0;
-  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called", "mars", "and", 
-                   "pluto", "was", "from", "a", "planet", "called", "pluto"};
+  char* words[] = {"the", "cat", "was", "from", "a", "planet", "called", 
+                   "mars", "and", "pluto", "was", "from", "a", "planet", 
+                   "called", "pluto"};
+
   Node_t** hashTable = createTableX(10);
   
   printf("\n\n******TEST GET ALL**********");
